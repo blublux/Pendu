@@ -10,12 +10,10 @@ public class JeuPendu {
 
 		// Affichage frame = new Affichage();
 		
-		
 		menu();
 
 		ReglePendu r = new ReglePendu();
 		//Affichage fen = new Affichage();
-
 
 		while (run) {
 			penduJeu(r);
