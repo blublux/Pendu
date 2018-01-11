@@ -10,22 +10,10 @@ public class ReglePendu {
 
 	public ReglePendu() {
 
-		choixMot();
-
-		motTab = new char[mot.length() - 1];
-
-		for (int i = 0; i < motTab.length; i++) {
-			motTab[i] = mot.charAt(i);
-			// System.out.print("[" + motTab[i] + "] ");
-		}
-		System.out.print("\n");
-
-		lettresTrouve = new boolean[motTab.length];
-
 	}
 
 	public void choixMot() {
-		int n = (int) (Math.random() * 836); //nombre de mot
+		int n = (int) (Math.random() * 836); // nombre de mot
 
 		try {
 			File d = new File("dictionnaire.txt");
@@ -48,13 +36,23 @@ public class ReglePendu {
 			e.printStackTrace();
 		}
 
+		motTab = new char[mot.length() - 1];
+
+		for (int i = 0; i < motTab.length; i++) {
+			motTab[i] = mot.charAt(i);
+			// System.out.print("[" + motTab[i] + "] ");
+		}
+		System.out.print("\n");
+
+		lettresTrouve = new boolean[motTab.length];
+
 	}
 
 	public void affiche1() {
 
 		// 0 //
 		System.out.println("Vous avez fait " + nbErreurs + " erreurs.");
-		
+
 		switch (nbErreurs) {
 
 		default:

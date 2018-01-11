@@ -2,9 +2,11 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class Affichage extends JFrame implements ActionListener, WindowListener {
+public class Menu extends JFrame implements ActionListener, WindowListener {
 
-	public Affichage() {
+	private boolean run = false;
+
+	public Menu() {
 
 		setSize(800, 600);
 		setTitle("Pendu");
@@ -15,16 +17,32 @@ public class Affichage extends JFrame implements ActionListener, WindowListener 
 		JButton b1 = new JButton("Jouer");
 		JButton b2 = new JButton("Scores");
 		JButton b3 = new JButton("Quitter");
+		b1.addActionListener(this);
+		b2.addActionListener(this);
+		b3.addActionListener(this);
 
-		c.add(b1,BorderLayout.CENTER);
+		c.add(b1);
 		c.add(b2);
 		c.add(b3);
 
-		setContentPane(c);
-
-		addWindowListener(this);
+		this.setContentPane(c);
+		this.addWindowListener(this);
 		this.setVisible(true);
 
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		if ((e.getActionCommand()).equals(("Jouer"))) {
+			this.run = true;
+			this.dispose();
+			DessinPendu d = new DessinPendu();
+		}
+		if ((e.getActionCommand()).equals(("Scores"))) {
+
+		}
+		if ((e.getActionCommand()).equals(("Quitter"))) {
+			System.exit(0);
+		}
 	}
 
 	public void windowClosing(WindowEvent e) {
@@ -52,10 +70,6 @@ public class Affichage extends JFrame implements ActionListener, WindowListener 
 	}
 
 	public void windowOpened(WindowEvent e) {
-
-	}
-
-	public void actionPerformed(ActionEvent e) {
 
 	}
 }
