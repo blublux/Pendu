@@ -1,13 +1,13 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Scanner;
 import javax.swing.*;
 
 public class DessinPendu extends JFrame implements ActionListener, WindowListener {
 
-	private ReglePendu r;
+	private boolean run = false;
+	private static boolean nouvellePartie = true;
 	private static char[] lettreUtilise = new char[26];
-	private String[] alphabet = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q",
-			"R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
 
 	public DessinPendu() {
 
@@ -20,65 +20,70 @@ public class DessinPendu extends JFrame implements ActionListener, WindowListene
 		JButton b = new JButton("Retour");
 		b.addActionListener(this);
 		c.add(b);
-
-		for (int i = 0; i < 26; i++) {
-			JButton btn = new JButton();
-			btn.setText(alphabet[i]);
-			btn.addActionListener(this);
-			c.add(btn);
-		}
-
-		r = new ReglePendu();
-		r.choixMot();
+		
+		this.penduJeu(new ReglePendu());
 
 		this.setContentPane(c);
 		this.addWindowListener(this);
 		this.setVisible(true);
+
 	}
 
-	public void penduRun(char input) {
+	public void penduJeu(ReglePendu r) {
 
-		boolean ignore = false;
+		while (run) {
 
-		for (int i = 0; i < r.getNbEssais(); i++) {
-			if (input == lettreUtilise[i]) {
-				ignore = true;
+			boolean ignore = false;
+
+			if (nouvellePartie) {
+				r.choixMot();
+				nouvellePartie = false;
 			}
-		}
-		if (!ignore) {
-			if (!r.rechercher(input)) {
-				System.out.print("test");
 
-				r.SetNbErreurs();
-			}
-			r.SetNbEssais();
+			r.affiche1();
+			r.affiche2();
 
-			System.out.println("Lettres utilisés : ");
+			Scanner sc = new Scanner(System.in);
+			char input = sc.next().charAt(0);
+			input = Character.toUpperCase(input);
 			for (int i = 0; i < r.getNbEssais(); i++) {
-				if (lettreUtilise[i] == 0) {
-					lettreUtilise[i] = input;
-					break;
+				if (input == lettreUtilise[i]) {
+					ignore = true;
 				}
 			}
+			if (!ignore) {
+				if (!r.rechercher(input)) {
 
+					r.SetNbErreurs();
+				}
+				r.SetNbEssais();
+
+				System.out.println("Lettres utilisés : ");
+				for (int i = 0; i < r.getNbEssais(); i++) {
+					if (lettreUtilise[i] == 0) {
+						lettreUtilise[i] = input;
+						break;
+					}
+				}
+			}
 			for (int i = 0; i < r.getNbEssais(); i++) {
 				System.out.print(lettreUtilise[i] + " ");
 			}
 			System.out.print("\n");
 
-			r.affiche1();
-			r.affiche2();
+			if (r.test())
 
-			if (r.test()) {
+			{
 				partieGagne();
 				for (int i = 0; i < r.getMotTab().length; i++) {
 					System.out.print(" " + r.getMotTab()[i] + " ");
 				}
+				sc.close();
 			}
-			System.out.println("\n");
-		}
-		if (r.getNbErreurs() >= 6) {
-			partiePerdu(r.getMot());
+			if (r.getNbErreurs() >= 6) {
+				partiePerdu(r.getMot());
+				sc.close();
+			}
 		}
 	}
 
@@ -92,14 +97,8 @@ public class DessinPendu extends JFrame implements ActionListener, WindowListene
 	}
 
 	public void actionPerformed(ActionEvent e) {
-
-		for (int i = 0; i < 26; i++) {
-			if ((e.getActionCommand().equals(alphabet[i]))) {
-				this.penduRun(alphabet[i].charAt(0));
-			}
-		}
-
 		if ((e.getActionCommand()).equals(("Retour"))) {
+			run = false;
 			this.dispose();
 			Menu m = new Menu();
 		}
