@@ -36,6 +36,7 @@ public class Menu extends JFrame implements ActionListener, WindowListener {
 			this.run = true;
 			this.dispose();
 			DessinPendu d = new DessinPendu();
+
 		}
 		if ((e.getActionCommand()).equals(("Scores"))) {
 
