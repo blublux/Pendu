@@ -10,6 +10,7 @@ public class ReglePendu {
 
 	public ReglePendu() {
 
+		choixMot();
 	}
 
 	public void choixMot() {
@@ -30,65 +31,92 @@ public class ReglePendu {
 		} catch (FileNotFoundException e) {
 			// Cette exception est levée si l'objet FileInputStream ne trouve aucun fichier
 			e.printStackTrace();
-
+			System.exit(0);
 		} catch (IOException e) {
 			// Celle-ci se produit lors d'une erreur d'écriture ou de lecture
 			e.printStackTrace();
+			System.exit(0);
 		}
 
 		motTab = new char[mot.length() - 1];
 
 		for (int i = 0; i < motTab.length; i++) {
 			motTab[i] = mot.charAt(i);
-			// System.out.print("[" + motTab[i] + "] ");
 		}
-		System.out.print("\n");
 
 		lettresTrouve = new boolean[motTab.length];
 
 	}
 
-	public void affiche1() {
-
-		// 0 //
-		System.out.println("Vous avez fait " + nbErreurs + " erreurs.");
+	public String affiche1() {
+		String dessin = "";
 
 		switch (nbErreurs) {
 
-		default:
+		case 0:
 			break;
 
 		case 1:
+			dessin = "# # # # # ___ ----";
 			break;
 
 		case 2:
+			dessin = "# --| # --| # --| # --| # _|_ ----";
 			break;
 
 		case 3:
+			dessin = "- ____ # --| # --| # --| # --| # _|_ ";
 			break;
 
 		case 4:
+			dessin = "- ____ # --|/ # --| # --| # --| # _|_ ";
 			break;
 
 		case 5:
+			dessin = "- ____ # --|/----| # --| # --| # --| # _|_ ";
 			break;
 
 		case 6:
+			dessin = "- ____ # --|/----| # --|---- o # --| # --| # _|_ ";
+			break;
+
+		case 7:
+			dessin = "- ____ # --|/----| # --|---- o # --|-----| # --| # _|_ ";
+			break;
+
+		case 8:
+			dessin = "- ____ # --|/----| # --|---- o # --|----/| # --| # _|_ ";
+			break;
+
+		case 9:
+			dessin = "- ____ # --|/----| # --|---- o # --|----/|\\ # --| # _|_ ";
+			break;
+
+		case 10:
+			dessin = "- ____ # --|/----| # --|---- o # --|----/|\\ # --|----/ # _|_ ";
+			break;
+
+		default:
+			dessin = "- ____ # --|/----| # --|---- o # --|----/|\\ # --|----/-\\ # _|_ ";
 			break;
 
 		}
+		return convertToMultiline(dessin);
 	}
 
-	public void affiche2() {
+	public String affiche2() {
+		String texte = "";
+		int temp = motTab.length;
+		for (int i = 0; i < temp; i++) {
+			if (lettresTrouve[i]) {
+				texte = texte + motTab[i] + ' ';
+			}
 
-		for (int i = 0; i < motTab.length; i++) {
-
-			if (lettresTrouve[i])
-				System.out.print(" " + motTab[i] + " ");
-			else
-				System.out.print(" _ ");
+			else {
+				texte = texte + '_' + ' ';
+			}
 		}
-
+		return texte;
 	}
 
 	public boolean rechercher(char c) {
@@ -107,16 +135,16 @@ public class ReglePendu {
 	public boolean test() {
 
 		int a = 0;
-		boolean w = false;
+		boolean win = false;
 
 		for (int i = 0; i < motTab.length; i++) {
 			if (lettresTrouve[i])
 				a++;
 		}
 		if (a == motTab.length)
-			w = true;
+			win = true;
 
-		return w;
+		return win;
 	}
 
 	public char[] getMotTab() {
@@ -145,6 +173,10 @@ public class ReglePendu {
 
 	public void SetNbEssais() {
 		nbEssais++;
+	}
+
+	public static String convertToMultiline(String texte) {
+		return "<html>" + texte.replaceAll("-", "&nbsp").replaceAll("#", "<br />");
 	}
 
 }
